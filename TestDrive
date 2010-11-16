@@ -161,13 +161,10 @@ def use_diff(target_branch, params, rb, review_request)
   msgln("got it!")
 
   # Change to the branch that this patch applies to
-  if target_branch != DEFAULT_TARGET_BRANCH
-    `git checkout -b #{target_branch}`
-  end
-
-  # Create the branch for this review_request patch
+  `git checkout origin/#{target_branch}`
   branch_name = "rev-req-#{review_request['review_request']['id']}"
   `git checkout -b #{branch_name}`
+  `git pull origin #{target_branch}`
 
    # Apply diff
   msg("Applying diff...")

@@ -30,6 +30,7 @@ LATEST = 'latest'
 RR_DIR_PREFIX = 'rev_req_'
 RR_DIFF_PREFIX = 'diff_for_rr_'
 SVN_CO_DIR_NAME = 'test_drive'
+TEST_REPORT_FILE = 'test_report'
 MARKUS_REPO_DIR = 'repos'
 MARKUS_PDF_STORAGE_DIR = 'pdf_storage'
 MARKUS_TEST_FRAMEWORK_REPO_DIR = 'test_framework_repos'
@@ -268,8 +269,11 @@ begin
   call_rake('db:populate')
 
   if params['autotest']
-    msg("Running tests (dumping to test_report)...give this a few minutes...")
-    call_rake('test 2>&1 | tee test_report')
+    msg("Running tests (dumping to #{TEST_REPORT_FILE})...give this a few minutes...")
+    File.open(TEST_REPORT_FILE, 'w') do |f|
+      f.write("Running tests for #{result_branch_name} - #{Time.now}")
+    end
+    call_rake('test 2>&1 | tee --append test_report')
   end
 
   msgln("All done setting up!")
